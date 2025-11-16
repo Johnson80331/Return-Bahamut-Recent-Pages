@@ -9,6 +9,7 @@
 // @include      https://forum.gamer.com.tw/?c=*
 // @icon         https://i2.bahamut.com.tw/favicon.svg?v=1689129528
 // @downloadURL  https://johnson80331.github.io/Return-Bahamut-Recent-Pages/巴哈姆特顯示全部最近閱覽-1.1(minified).user.js
+// @updateURL    https://johnson80331.github.io/Return-Bahamut-Recent-Pages/巴哈姆特顯示全部最近閱覽-1.1(minified).user.js
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
