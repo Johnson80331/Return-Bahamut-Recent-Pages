@@ -2,6 +2,7 @@
 // @name         巴哈姆特顯示全部最近閱覽
 // @namespace    http://tampermonkey.net/
 // @version      1.1(full)
+// @author       Johnson8033
 // @description  在原本位置增加全部最近閱覽
 // @match        https://www.gamer.com.tw/*
 // @match        https://forum.gamer.com.tw/

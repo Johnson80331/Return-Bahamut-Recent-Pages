@@ -2,11 +2,13 @@
 // @name         巴哈姆特顯示全部最近閱覽
 // @namespace    http://tampermonkey.net/
 // @version      1.1(minified)
+// @author       Johnson8033
 // @description  在原本位置增加全部最近閱覽
 // @match        https://www.gamer.com.tw/*
 // @match        https://forum.gamer.com.tw/
 // @include      https://forum.gamer.com.tw/?c=*
 // @icon         https://i2.bahamut.com.tw/favicon.svg?v=1689129528
+// @downloadURL  https://johnson80331.github.io/Return-Bahamut-Recent-Pages/巴哈姆特顯示全部最近閱覽-1.1(minified).user.js
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
