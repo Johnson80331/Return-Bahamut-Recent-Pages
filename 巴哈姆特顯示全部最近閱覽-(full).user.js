@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴哈姆特顯示全部最近閱覽
 // @namespace    巴哈姆特顯示全部最近閱覽-Johnson8033
-// @version      1.3(full)
+// @version      1.4(full)
 // @author       Johnson8033
 // @description  在原本位置增加全部最近閱覽
 // @match        https://www.gamer.com.tw/*
@@ -215,6 +215,7 @@
             if (!ul) return console.warn("no boardHistory");
             if (ulObserver) ulObserver.disconnect();
             ul.innerHTML = '';
+            val = GM_getValue("recent", 10);
             for (const {bsn, name, src} of list) {
                 if (val-- === 0) break;
                 const li = document.createElement('li');
@@ -261,6 +262,7 @@
             if (observer) observer.disconnect();
             target2.innerHTML = '';
             target2Small.innerHTML = '';
+            val = GM_getValue("recent", 10);
             for (const {bsn, name, src} of list) {
                 if (val-- === 0) break;
                 const span = document.createElement('span');
