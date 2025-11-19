@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴哈姆特顯示全部最近閱覽
 // @namespace    巴哈姆特顯示全部最近閱覽-Johnson8033
-// @version      1.2(full)
+// @version      1.3(full)
 // @author       Johnson8033
 // @description  在原本位置增加全部最近閱覽
 // @match        https://www.gamer.com.tw/*
@@ -199,7 +199,7 @@
         GM_setValue("recentForums", recentList);
     }
     if (recentList.length === 0) await cookiesToStorage()
-    else if (list){
+    else if (list && !(url.startsWith("https://www.gamer.com.tw/") || url === 'https://forum.gamer.com.tw/' || url.startsWith("https://forum.gamer.com.tw/?c="))){
         await addRecentEntry(list[0][0], list[0][1]);
     }
     list = GM_getValue("recentForums", []);
