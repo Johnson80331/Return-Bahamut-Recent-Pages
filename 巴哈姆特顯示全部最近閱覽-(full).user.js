@@ -11,8 +11,8 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_xmlhttpRequest
-// @downloadURL  https://github.com/Johnson80331/Return-Bahamut-Recent-Pages/blob/main/%E5%B7%B4%E5%93%88%E5%A7%86%E7%89%B9%E9%A1%AF%E7%A4%BA%E5%85%A8%E9%83%A8%E6%9C%80%E8%BF%91%E9%96%B1%E8%A6%BD-1.2(full).user.js
-// @updateURL    https://github.com/Johnson80331/Return-Bahamut-Recent-Pages/blob/main/%E5%B7%B4%E5%93%88%E5%A7%86%E7%89%B9%E9%A1%AF%E7%A4%BA%E5%85%A8%E9%83%A8%E6%9C%80%E8%BF%91%E9%96%B1%E8%A6%BD-1.2(full).user.js
+// @downloadURL  https://github.com/Johnson80331/Return-Bahamut-Recent-Pages/raw/refs/heads/main/%E5%B7%B4%E5%93%88%E5%A7%86%E7%89%B9%E9%A1%AF%E7%A4%BA%E5%85%A8%E9%83%A8%E6%9C%80%E8%BF%91%E9%96%B1%E8%A6%BD-1.2(full).user.js
+// @updateURL    https://github.com/Johnson80331/Return-Bahamut-Recent-Pages/raw/refs/heads/main/%E5%B7%B4%E5%93%88%E5%A7%86%E7%89%B9%E9%A1%AF%E7%A4%BA%E5%85%A8%E9%83%A8%E6%9C%80%E8%BF%91%E9%96%B1%E8%A6%BD-1.2(full).user.js
 // ==/UserScript==
 
 (async function () {
