@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         巴哈姆特顯示全部最近閱覽
-// @namespace    http://tampermonkey.net/
+// @namespace    巴哈姆特顯示全部最近閱覽-Johnson8033(minified)
 // @version      1.2(minified)
 // @author       Johnson8033
 // @description  在原本位置增加全部最近閱覽
