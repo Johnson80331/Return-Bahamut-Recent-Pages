@@ -17,8 +17,8 @@
 <summary>按我查看詳細步驟</summary>
 
 ![步驟1](/img/step1.png)
-![步驟1](/img/step2.png)
-![步驟1](/img/step3.png)
+![步驟2](/img/step2.png)
+![步驟3](/img/step3.png)
 </details>
 </div>
 
