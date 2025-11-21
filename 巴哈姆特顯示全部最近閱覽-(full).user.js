@@ -1,12 +1,17 @@
 // ==UserScript==
 // @name         巴哈姆特顯示全部最近閱覽
 // @namespace    巴哈姆特顯示全部最近閱覽-Johnson8033
-// @version      1.4(full)
+// @version      1.5(full)
 // @author       Johnson8033
 // @description  在原本位置增加全部最近閱覽
 // @match        https://www.gamer.com.tw/*
 // @match        https://forum.gamer.com.tw/*
 // @icon         https://i2.bahamut.com.tw/favicon.svg?v=1689129528
+// @require      https://unpkg.com/@popperjs/core@2
+// @require      https://unpkg.com/tippy.js@6
+// @resource     TIPPY_CSS https://unpkg.com/tippy.js@6/themes/light.css
+// @grant        GM_addStyle
+// @grant        GM_getResourceText
 // @grant        GM_registerMenuCommand
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -20,6 +25,7 @@
     'use strict';
     const url = window.location.href;
     let recentList = GM_getValue("recentForums", []);
+    GM_addStyle(GM_getResourceText("TIPPY_CSS"));
     function getCookie(name) {
         const c = document.cookie.split('; ').find(c => c.startsWith(name + '='));
         if (!c) return null;
@@ -290,6 +296,13 @@
                 const innerSpanClone = aClone.querySelector('span');
                 innerSpanClone.className = 'line-clamp-2 leading-tight !hidden';
                 target2Small.append(spanClone);
+                tippy(spanClone, {
+                    content: name,
+                    theme: mode,
+                    placement: 'right',
+                    animation: 'fade',
+                    maxWidth: 350,
+                });
             };
             observer.observe(target, { childList: true, subtree: true });
         };
