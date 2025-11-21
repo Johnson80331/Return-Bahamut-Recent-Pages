@@ -7,6 +7,11 @@
 // @match        https://www.gamer.com.tw/*
 // @match        https://forum.gamer.com.tw/*
 // @icon         https://i2.bahamut.com.tw/favicon.svg?v=1689129528
+// @require      https://unpkg.com/@popperjs/core@2
+// @require      https://unpkg.com/tippy.js@6
+// @resource     TIPPY_CSS https://unpkg.com/tippy.js@6/themes/light.css
+// @grant        GM_addStyle
+// @grant        GM_getResourceText
 // @grant        GM_registerMenuCommand
 // @grant        GM_setValue
 // @grant        GM_getValue
