@@ -153,11 +153,11 @@
     let list;
     try {
         list = JSON.parse(raw);
-    } catch(e) {
+    } catch (e) {
         console.error(e);
         return;
     }
-    function getBoardImage(bsn) {
+    function getBoardImage(bsn, queryClass) {
         return new Promise(resolve => {
             GM_xmlhttpRequest({
                 method: "GET",
@@ -166,11 +166,9 @@
                     try {
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(res.responseText, 'text/html');
-                        const imgTag = doc.querySelector('div.FM-abox6B a img');
-                        if (imgTag) resolve(imgTag.src);
-                        const imgTag2 = doc.querySelector('div.FM-abox1.tippy-abox a img');
-                        resolve(imgTag2 ? imgTag2.src : '');
-                    } catch(e) { resolve(''); }
+                        const imgTag = doc.querySelector(queryClass);
+                        resolve(imgTag ? imgTag.src : '');
+                    } catch (e) { resolve(''); }
                 },
                 onerror() { resolve(''); }
             });
@@ -179,7 +177,12 @@
     async function addRecentEntry(bsn, name) {
         let recent = GM_getValue("recentForums", []);
         let newEntry = { bsn: bsn, name: name };
-        newEntry.src = await getBoardImage(bsn);
+        const [src, srcWelcome] = await Promise.all([
+            getBoardImage(bsn, 'div.FM-abox6B a img'),
+            getBoardImage(bsn, 'div.FM-abox1.tippy-abox a img')
+        ]);
+        newEntry.src = src;
+        newEntry.srcWelcome = srcWelcome;
         recent = recent.filter(entry => entry.bsn !== bsn);
         recent.unshift(newEntry);
         if (recent.length > 30) {
@@ -190,8 +193,11 @@
     async function cookiesToStorage(bsn, name) {
         let newEntries = await Promise.all(
             list.map(async ([bsn, name]) => {
-                let src = await getBoardImage(bsn);
-                return { bsn, name, src };
+                const [src, srcWelcome] = await Promise.all([
+                    getBoardImage(bsn, 'div.FM-abox6B a img'),
+                    getBoardImage(bsn, 'div.FM-abox1.tippy-abox a img')
+                ]);
+                return { bsn, name, src, srcWelcome };
             })
         );
         newEntries.forEach(entry => {
@@ -201,24 +207,24 @@
         GM_setValue("recentForums", recentList);
     }
     if (recentList.length === 0) await cookiesToStorage()
-    else if (list && !(url.startsWith("https://www.gamer.com.tw/") || url === 'https://forum.gamer.com.tw/' || url.startsWith("https://forum.gamer.com.tw/?c="))){
+    else if (list && !(url.startsWith("https://www.gamer.com.tw/") || url === 'https://forum.gamer.com.tw/' || url.startsWith("https://forum.gamer.com.tw/?c="))) {
         await addRecentEntry(list[0][0], list[0][1]);
     }
     list = GM_getValue("recentForums", []);
     if (!list) return console.warn("cookies list empty");
     let val = GM_getValue("recent", null);
-    if (!val){
+    if (!val) {
         val = 10;
         GM_setValue("recent", val);
     }
-    if (url.startsWith("https://www.gamer.com.tw/")){
+    if (url.startsWith("https://www.gamer.com.tw/")) {
         function buildList() {
             const ul = document.querySelector('#boardHistory');
             if (!ul) return console.warn("no boardHistory");
             if (ulObserver) ulObserver.disconnect();
             ul.innerHTML = '';
             val = GM_getValue("recent", 10);
-            for (const {bsn, name, src} of list) {
+            for (const { bsn, name, src = '', srcWelcome = '' } of list) {
                 if (val-- === 0) break;
                 const li = document.createElement('li');
                 li.className = 'sidenav-section__item';
@@ -235,7 +241,7 @@
                 div.className = 'sidenav-section__content';
                 const img = document.createElement('img');
                 img.className = 'sidenav-section__img';
-                img.src = src;
+                img.src = src || srcWelcome || '';
                 img.loading = 'lazy';
                 const p = document.createElement('p');
                 p.className = 'sidenav-section__name';
@@ -253,9 +259,9 @@
         ulObserver.observe(ul, { childList: true, subtree: true });
         buildList();
     }
-    else if (url === 'https://forum.gamer.com.tw/' || url.startsWith("https://forum.gamer.com.tw/?c=")){
+    else if (url === 'https://forum.gamer.com.tw/' || url.startsWith("https://forum.gamer.com.tw/?c=")) {
         const target = document.querySelector('.relative.transition-all.Aside_section__QYARK.px-3');
-        function buildlist (){
+        function buildlist() {
             const target2 = target.querySelector('div[class=""]');
             const targetSmall = document.querySelector('.relative.transition-all.Aside_section__QYARK:not(.px-3)');
             if (!targetSmall) return console.warn("no small side panel");
@@ -265,7 +271,7 @@
             target2.innerHTML = '';
             target2Small.innerHTML = '';
             val = GM_getValue("recent", 10);
-            for (const {bsn, name, src} of list) {
+            for (const { bsn, name, src = '', srcWelcome = '' } of list) {
                 if (val-- === 0) break;
                 const span = document.createElement('span');
                 const a = document.createElement('a');
@@ -275,7 +281,7 @@
                 const img = document.createElement('img');
                 img.className = 'myBoard_boardImage__Oa5K_ mr-2'
                 img.alt = name;
-                img.src = src;
+                img.src = srcWelcome || src || '';
                 img.loading = 'lazy';
                 const innerSpan = document.createElement('span');
                 innerSpan.className = 'line-clamp-2 leading-tight'
@@ -288,7 +294,6 @@
                 const aClone = spanClone.querySelector('a');
                 const imgClone = aClone.querySelector('img');
                 imgClone.className = 'myBoard_boardImage__Oa5K_';
-                img.src = src;
                 const innerSpanClone = aClone.querySelector('span');
                 innerSpanClone.className = 'line-clamp-2 leading-tight !hidden';
                 target2Small.append(spanClone);
