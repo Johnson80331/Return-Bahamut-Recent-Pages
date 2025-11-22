@@ -9,9 +9,6 @@
 // @icon         https://i2.bahamut.com.tw/favicon.svg?v=1689129528
 // @require      https://unpkg.com/@popperjs/core@2
 // @require      https://unpkg.com/tippy.js@6
-// @resource     TIPPY_CSS https://unpkg.com/tippy.js@6/themes/light.css
-// @grant        GM_addStyle
-// @grant        GM_getResourceText
 // @grant        GM_registerMenuCommand
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -25,7 +22,6 @@
     'use strict';
     const url = window.location.href;
     let recentList = GM_getValue("recentForums", []);
-    GM_addStyle(GM_getResourceText("TIPPY_CSS"));
     function getCookie(name) {
         const c = document.cookie.split('; ').find(c => c.startsWith(name + '='));
         if (!c) return null;
