@@ -218,12 +218,10 @@
         });
         GM_setValue("recentForums", recentList);
     }
-    let check = false;
     if (recentList.length === 0) await cookiesToStorage()
     else if (list && !(url.startsWith("https://www.gamer.com.tw/") || url === 'https://forum.gamer.com.tw/' || url.startsWith("https://forum.gamer.com.tw/?c="))) {
         await addRecentEntry(list[0][0], list[0][1]);
     }
-    else check = true;
     list = GM_getValue("recentForums", []);
     if (!list) return console.warn("cookies list empty");
     let val = GM_getValue("recent", null);
@@ -233,10 +231,10 @@
     }
     async function updateURL() {
         let newEntries = await Promise.all(
-            list.map(async ({bsn, name, src = '', srcWelcome = ''}) => {
+            list.map(async ({ bsn, name, src = '', srcWelcome = '' }) => {
                 const [newSrc, newSrcWelcome] = await Promise.all([
-                    !src?src:validURL(bsn, src, 'div.FM-abox6B a img'),
-                    !srcWelcome?srcWelcome:validURL(bsn, srcWelcome, 'div.FM-abox1.tippy-abox a img')
+                    !src ? src : validURL(bsn, src, 'div.FM-abox6B a img'),
+                    !srcWelcome ? srcWelcome : validURL(bsn, srcWelcome, 'div.FM-abox1.tippy-abox a img')
                 ]);
                 return { bsn, name, src: newSrc, srcWelcome: newSrcWelcome };
             })
@@ -248,7 +246,7 @@
         });
         GM_setValue("recentForums", list);
     }
-    if (check) await updateURL();
+    if (url.startsWith("https://www.gamer.com.tw/") || url === 'https://forum.gamer.com.tw/' || url.startsWith("https://forum.gamer.com.tw/?c=")) await updateURL();
     if (url.startsWith("https://www.gamer.com.tw/")) {
         function buildList() {
             const ul = document.querySelector('#boardHistory');
