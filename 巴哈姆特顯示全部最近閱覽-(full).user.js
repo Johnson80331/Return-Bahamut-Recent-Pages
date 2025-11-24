@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴哈姆特顯示全部最近閱覽
 // @namespace    巴哈姆特顯示全部最近閱覽-Johnson8033
-// @version      1.6(full)
+// @version      1.7(full)
 // @author       Johnson8033
 // @description  在原本位置增加全部最近閱覽
 // @match        https://www.gamer.com.tw/*
@@ -174,6 +174,18 @@
             });
         });
     }
+    function validURL(bsn, url, type) {
+        return new Promise(resolve => {
+            const img = new Image();
+            const testUrl = url + (url.includes("?") ? "&" : "?") + "_cb=" + Date.now();
+            img.onload = () => {
+                if (img.naturalWidth > 0) resolve(url);
+                else resolve(getBoardImage(bsn, type));
+            }
+            img.onerror = () => resolve(getBoardImage(bsn, type));
+            img.src = testUrl;
+        });
+    }
     async function addRecentEntry(bsn, name) {
         let recent = GM_getValue("recentForums", []);
         let newEntry = { bsn: bsn, name: name };
@@ -206,10 +218,12 @@
         });
         GM_setValue("recentForums", recentList);
     }
+    let check = false;
     if (recentList.length === 0) await cookiesToStorage()
     else if (list && !(url.startsWith("https://www.gamer.com.tw/") || url === 'https://forum.gamer.com.tw/' || url.startsWith("https://forum.gamer.com.tw/?c="))) {
         await addRecentEntry(list[0][0], list[0][1]);
     }
+    else check = true;
     list = GM_getValue("recentForums", []);
     if (!list) return console.warn("cookies list empty");
     let val = GM_getValue("recent", null);
@@ -217,6 +231,24 @@
         val = 10;
         GM_setValue("recent", val);
     }
+    async function updateURL() {
+        let newEntries = await Promise.all(
+            list.map(async ({bsn, name, src = '', srcWelcome = ''}) => {
+                const [newSrc, newSrcWelcome] = await Promise.all([
+                    !src?src:validURL(bsn, src, 'div.FM-abox6B a img'),
+                    !srcWelcome?srcWelcome:validURL(bsn, srcWelcome, 'div.FM-abox1.tippy-abox a img')
+                ]);
+                return { bsn, name, src: newSrc, srcWelcome: newSrcWelcome };
+            })
+        );
+        list = [];
+        newEntries.forEach(entry => {
+            list = list.filter(e => e.bsn !== entry.bsn);
+            list.push(entry);
+        });
+        GM_setValue("recentForums", list);
+    }
+    if (check) await updateURL();
     if (url.startsWith("https://www.gamer.com.tw/")) {
         function buildList() {
             const ul = document.querySelector('#boardHistory');
