@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴哈姆特顯示全部最近閱覽
 // @namespace    巴哈姆特顯示全部最近閱覽-Johnson8033
-// @version      1.7(full)
+// @version      1.8(full)
 // @author       Johnson8033
 // @description  在原本位置增加全部最近閱覽
 // @match        https://www.gamer.com.tw/*
@@ -249,10 +249,12 @@
     if (url.startsWith("https://www.gamer.com.tw/") || url === 'https://forum.gamer.com.tw/' || url.startsWith("https://forum.gamer.com.tw/?c=")) await updateURL();
     if (url.startsWith("https://www.gamer.com.tw/")) {
         function buildList() {
-            const ul = document.querySelector('#boardHistory');
-            if (!ul) return console.warn("no boardHistory");
+            const ul = document.querySelector('.sidenav-section__inner.boardHistory');
+            const ul2 = document.querySelectorAll('.sidenav-section__inner.boardHistory')[1];
+            if (!ul || !ul2) return console.warn("no boardHistory");
             if (ulObserver) ulObserver.disconnect();
             ul.innerHTML = '';
+            ul2.innerHTML = '';
             val = GM_getValue("recent", 10);
             for (const { bsn, name, src = '', srcWelcome = '' } of list) {
                 if (val-- === 0) break;
@@ -281,10 +283,11 @@
                 a.appendChild(div);
                 li.appendChild(a);
                 ul.appendChild(li);
+                ul2.appendChild(li.cloneNode(true));
             };
             ulObserver.observe(ul, { childList: true, subtree: true });
         }
-        const ul = document.querySelector('#boardHistory');
+        const ul = document.querySelector('.sidenav-section__inner.boardHistory');
         const ulObserver = new MutationObserver(buildList);
         ulObserver.observe(ul, { childList: true, subtree: true });
         buildList();
